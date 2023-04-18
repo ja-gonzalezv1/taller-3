@@ -1,14 +1,13 @@
 import numpy as np
 
 
-def PotenciaInversa (M, v, tolerancia = 1e-8):
+def PotenciaInversa (M, v, itmax = 1000):
     u= v.copy()
     Min = np.linalg.inv(M)
-    dif = np.array([1,1,1])
-    dif_min= (np.array([tolerancia, tolerancia, tolerancia]))
-    while dif < dif_min:
+    it = 0
+    while it < itmax:
+        it += 1
         un = (np.dot(Min, u)) / (np.linalg.norm(u))
-        dif = un - u
         u = un
     lamda = 1 / (np.linalg.norm(u))
     vector = u / (np.linalg.norm(u))
@@ -19,6 +18,3 @@ v = np.array([1,1,1])
 
 
 print(PotenciaInversa(M, v))
-
-
-# utilizar max it en ciclo while
