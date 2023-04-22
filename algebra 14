@@ -30,7 +30,7 @@ for i in range (3):
                     levi= levis[k][j][i]
                     conmutator= np.dot(sigmas[i], sigmas[j]) - np.dot(sigmas[j], sigmas[i])
                     lie= 2j*levi*sigmas[k]
-                    if conmutator.all() != lie.all():
+                    if (conmutator == lie).all() == False:
                         print("falso")
                         
 # No se imprimió "falso", por lo que si se cumple es el álgebra
