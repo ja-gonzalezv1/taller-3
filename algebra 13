@@ -35,7 +35,7 @@ for i in range (3):
                     levi= SO3[k][j][i]
                     conmutator= np.dot(SO3[i], SO3[j]) - np.dot(SO3[j], SO3[i])
                     lie= levi*SO3[k]
-                    if conmutator.all() != lie.all():
+                    if (conmutator == lie).all() == False:
                         print("falso")
                         
 # No se imprimió "falso", por lo que si se cumple es el álgebra
