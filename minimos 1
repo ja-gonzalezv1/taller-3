@@ -1,0 +1,49 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def GetFit(x,y,n=2):
+    
+    l = x.shape[0]
+    b = y
+    
+    A = np.ones((l,n+1))
+    
+    for i in range(1,n+1):
+        A[:,i] = x**i
+        
+    AT = np.dot(A.T,A)
+    bT = np.dot(A.T,b)
+    
+    xsol = np.linalg.solve(AT,bT)
+    
+    return xsol
+
+
+def GetModel(x,p):
+    
+    y = 0
+    for n in range(len(p)):
+        y += p[n]*x**n
+        
+    return y
+
+
+x = np.linspace(0,5,100)
+
+y1 = 2*x -2
+p1 = GetFit(x, y1)
+y1_ = GetModel(x, p1)
+
+plt.plot(x, y1_)
+
+y2 = (1 -x)/2
+p2 = GetFit(x, y2)
+y2_ = GetModel(x, p2)
+
+y3 = 4 - x
+p3 = GetFit(x, y3)
+y3_ = GetModel(x, p3)
+
+# least squares, nearest point and squew lines
