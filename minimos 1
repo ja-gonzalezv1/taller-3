@@ -1,49 +1,52 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-def GetFit(x,y,n=2):
-    
-    l = x.shape[0]
-    b = y
-    
-    A = np.ones((l,n+1))
-    
-    for i in range(1,n+1):
-        A[:,i] = x**i
-        
-    AT = np.dot(A.T,A)
-    bT = np.dot(A.T,b)
-    
-    xsol = np.linalg.solve(AT,bT)
-    
-    return xsol
+def Punto (A, b):
+    At = np.transpose(A)
+    AtA = np.dot(At, A)
+    Atb = np.dot(At, b)
+    x = np.linalg.solve(AtA, Atb)
+    return x
 
+A = np.array([[2,-1], [1,2], [1,1]])
+b= np.array([2,1,4])
 
-def GetModel(x,p):
-    
-    y = 0
-    for n in range(len(p)):
-        y += p[n]*x**n
-        
-    return y
+x= Punto(A, b)
 
+x_= np.linspace(0,10, 100)
 
-x = np.linspace(0,5,100)
+y1_= 2*x_ -2
+plt.plot(x_, y1_)
 
-y1 = 2*x -2
-p1 = GetFit(x, y1)
-y1_ = GetModel(x, p1)
+y2_ = (1 - x_)/2
+plt.plot(x_, y2_)
 
-plt.plot(x, y1_)
+y3_ = 4 - x_
+plt.plot(x_, y3_)
 
-y2 = (1 -x)/2
-p2 = GetFit(x, y2)
-y2_ = GetModel(x, p2)
+plt.scatter(x[0], x[1])
 
-y3 = 4 - x
-p3 = GetFit(x, y3)
-y3_ = GetModel(x, p3)
+# El punto representa la menor distancia existente entre las tres líneas. 
+# Sería una especie de solución para un sistema que no tiene solución.
 
-# least squares, nearest point and squew lines
+X = np.linspace(-5, 5, 1000)
+Y = np.linspace(-5, 5, 1000)
+X, Y = np.meshgrid(X, Y)
+
+V = np.array([X, Y])
+D= np.array([])
+
+for x1 in X:
+    for y1 in Y:
+        v= np.array([x1, y1])
+        p= np.dot(A, v)
+
+for i in range(p.shape[1]):
+    p1 = p[:, i] - b
+    d = np.linalg.norm(p1)
+    np.append(D, d)
+            
+ax = plt.subplots(subplot_kw={"projection": "3d"})
+surf = ax.plot_surface(X, Y, D)
+plt.show()
