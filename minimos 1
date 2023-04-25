@@ -12,7 +12,7 @@ def Punto (A, b):
 A = np.array([[2,-1], [1,2], [1,1]])
 b= np.array([2,1,4])
 
-x= Punto(A, b)
+punto= Punto(A, b)
 
 x_= np.linspace(0,10, 100)
 
@@ -25,28 +25,29 @@ plt.plot(x_, y2_)
 y3_ = 4 - x_
 plt.plot(x_, y3_)
 
-plt.scatter(x[0], x[1])
+plt.scatter(punto[0], punto[1])
 
 # El punto representa la menor distancia existente entre las tres líneas. 
 # Sería una especie de solución para un sistema que no tiene solución.
 
-X = np.linspace(-5, 5, 1000)
-Y = np.linspace(-5, 5, 1000)
-X, Y = np.meshgrid(X, Y)
+X = np.linspace(-5, 5, 10)
+Y = np.linspace(-5, 5, 10)
 
-V = np.array([X, Y])
-D= np.array([])
 
-for x1 in X:
-    for y1 in Y:
-        v= np.array([x1, y1])
-        p= np.dot(A, v)
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
 
-for i in range(p.shape[1]):
-    p1 = p[:, i] - b
-    d = np.linalg.norm(p1)
-    np.append(D, d)
-            
-ax = plt.subplots(subplot_kw={"projection": "3d"})
-surf = ax.plot_surface(X, Y, D)
-plt.show()
+for x in X:
+    for y in Y:
+        v = np.array([x, y])
+        d = np.dot(A, v) - b
+        dis = np.linalg.norm(d)
+        ax.scatter(x, y, dis)
+
+z= np.linspace(0, 20, 100)
+for j in range(100):
+    ax.scatter(punto[0], punto[1], z[j], color= "black")
+
+
+# Parece que la línea que marca el punto pasa por el punto más bajo de la superficie
+
