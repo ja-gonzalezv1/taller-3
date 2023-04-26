@@ -11,11 +11,8 @@ y = data[:, 1]
 def Ajuste (x, theta0, theta1, theta2):
     return theta0 / (theta1 + (np.e**(-theta2*x)))
 
-def Costo (theta):
+def Costo (x, theta0, theta1, theta2):
     sum_ = 0
-    theta0 = theta[0]
-    theta1 = theta[1]
-    theta2 = theta[2]
     for i in range (len(x)):
         sum_ += ((y[i] - Ajuste(x[i], theta0, theta1, theta2)))**2
     return sum_
@@ -59,6 +56,13 @@ def Gradiente (theta, h = 0.001):
     g = np.array([dt0(theta), dt1(theta), dt2(theta)])
     return g
 
+def Grad(x, theta0, theta1, theta2, h= 0.001):
+    d0 = (Costo(x, theta0 + h, theta1, theta2) - Costo(x, theta0 - h, theta1, theta2)) / (2*h)
+    d1 = (Costo(x, theta0, theta1 + h, theta2) - Costo(x, theta0, theta1 - h, theta2)) / (2*h)
+    d2 = (Costo(x, theta0, theta1, theta2 + h) - Costo(x, theta0, theta1, theta2 - h)) / (2*h)
+    grad = np.array([d0, d1, d2])
+    return grad
+
 gamma = 0.001
 theta = np.array([1,1,1])
 dif = np.array([1,1,1])
@@ -66,19 +70,15 @@ e = 0.01
 itmax = 10000
 parametros = []
 while all(d < e for d in dif) == False:
-    print(Gradiente(theta))
-    theta = theta - (gamma * Gradiente(theta))
-    print(theta)
+    theta = theta - (gamma * Grad(x, theta[0], theta[1], theta[2]))
     parametros.append(theta)
     theta1 = theta
-    theta2 = theta1 - (gamma * Gradiente(theta1))
+    theta2 = theta1 - (gamma * Grad(x, theta1[0], theta1[1], theta1[2]))
     dif = theta1 - theta2
 
-par_finales = parametros[len(parametros) - 1]
+par_finales = parametros[-1]
 x_ = np.linspace(-10,10,500)
-y_ = par_finales[0] + par_finales[1]*x + par_finales[2]*(x**2)
+y_ = par_finales[0] + par_finales[1]*x_ + par_finales[2]*(x_**2)
 
 plt.scatter(x, y)
 plt.plot(x_, y_)
-
-# No entiendo porque la gradiente tiene forma (3,50)?
